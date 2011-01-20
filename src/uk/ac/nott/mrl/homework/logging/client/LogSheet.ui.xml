@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:d="urn:import:com.google.gwt.user.datepicker.client">	
+	<g:HTMLPanel>
+		<span class="label">Your Name:</span><g:TextBox ui:field="name" /><span><img class="warn" src="images/warning.png" /><g:InlineLabel ui:field="nameError"/></span><br />	
+		<span class="label">Date:</span><d:DateBox ui:field="date" /><span><img class="warn" src="images/warning.png" /><g:InlineLabel ui:field="dateError"/></span><br />
+		<div style="padding-top: 8px;">Incident and Comments:</div>
+		<div><div><g:TextArea ui:field="details" /></div>
+		<g:Button ui:field="submit">Log Incident</g:Button><g:InlineLabel ui:field="submitDetails"/></div>
+	</g:HTMLPanel>
+</ui:UiBinder> 
