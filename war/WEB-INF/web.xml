@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+	<servlet>
+		<servlet-name>AddLog</servlet-name>
+		<servlet-class>uk.ac.nott.mrl.homework.logging.serlvets.AddLog</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>CSVLogs</servlet-name>
+		<servlet-class>uk.ac.nott.mrl.homework.logging.serlvets.CSVLogs</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ClearLogs</servlet-name>
+		<servlet-class>uk.ac.nott.mrl.homework.logging.serlvets.ClearLogs</servlet-class>
+	</servlet>
+	
+		<servlet>
+		<servlet-name>Logs</servlet-name>
+		<servlet-class>uk.ac.nott.mrl.homework.logging.serlvets.Logs</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>AddLog</servlet-name>
+		<url-pattern>/addLog</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>CSVLogs</servlet-name>
+		<url-pattern>/logs.csv</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ClearLogs</servlet-name>
+		<url-pattern>/clear</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Logs</servlet-name>
+		<url-pattern>/logs</url-pattern>
+	</servlet-mapping>
+	
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>
