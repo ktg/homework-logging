@@ -11,58 +11,67 @@ import javax.persistence.Id;
 public class Entry
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 	private Date date;
 	private Date timestamp;
 	private String comment;
 	private String ip;
-	
-	public String getName()
-	{
-		return name;
-	}
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	public Date getDate()
-	{
-		return date;
-	}
-	public void setDate(Date date)
-	{
-		this.date = date;
-	}
+
 	public String getComment()
 	{
 		return comment;
 	}
-	public void setComment(String comment)
+
+	public Date getDate()
 	{
-		this.comment = comment;
+		return date;
 	}
+
 	public long getId()
 	{
 		return id;
 	}
-	public void setTimestamp(Date timestamp)
+
+	public String getIp()
 	{
-		this.timestamp = timestamp;
+		return ip;
 	}
-	
+
+	public String getName()
+	{
+		return name;
+	}
+
 	public Date getTimestamp()
 	{
 		return timestamp;
 	}
-	public void setIp(String ip)
+
+	public void setComment(final String comment)
+	{
+		this.comment = comment;
+	}
+
+	public void setDate(final Date date)
+	{
+		this.date = date;
+	}
+
+	public void setIp(final String ip)
 	{
 		this.ip = ip;
 	}
-	public String getIp()
+
+	public void setName(final String name)
 	{
-		return ip;
+		this.name = name;
+	}
+
+	public void setTimestamp(final Date timestamp)
+	{
+		this.timestamp = timestamp;
 	}
 }

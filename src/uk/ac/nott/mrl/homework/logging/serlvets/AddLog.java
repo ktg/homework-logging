@@ -19,16 +19,17 @@ import uk.ac.nott.mrl.homework.logging.model.Entry;
 public class AddLog extends HttpServlet
 {
 	private static final Logger logger = Logger.getLogger(AddLog.class.getName());
-	
+
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
+
+	@Override
+	public void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws IOException
 	{
 		logger.info("Add Log");
-		
-		EntityManager em = EMF.get().createEntityManager();
-		Entry entry = new Entry();
-		
+
+		final EntityManager em = EMF.get().createEntityManager();
+		final Entry entry = new Entry();
+
 		entry.setComment(req.getParameter("comment"));
 		entry.setIp(req.getRemoteAddr());
 		entry.setTimestamp(new Date());
@@ -36,16 +37,16 @@ public class AddLog extends HttpServlet
 		{
 			entry.setDate(dateFormat.parse(req.getParameter("date")));
 		}
-		catch (ParseException e)
+		catch (final ParseException e)
 		{
 			// TODO Auto-generated catch block
 			logger.log(Level.SEVERE, e.getMessage(), e);
-		}	
+		}
 		entry.setName(req.getParameter("name"));
-		
+
 		em.getTransaction().begin();
 		em.persist(entry);
-		em.getTransaction().commit();		
+		em.getTransaction().commit();
 		resp.setContentType("text/plain");
 		resp.getWriter().println("Success");
 		logger.info("Added Entry for " + entry.getName() + ", " + req.getParameter("date") + ": " + entry.getComment());

@@ -27,11 +27,11 @@ import com.google.gwt.user.datepicker.client.DateBox;
 
 public class LogSheet implements EntryPoint
 {
-	private static LoggerUiBinder uiBinder = GWT.create(LoggerUiBinder.class);
-
 	interface LoggerUiBinder extends UiBinder<Widget, LogSheet>
 	{
 	}
+
+	private static LoggerUiBinder uiBinder = GWT.create(LoggerUiBinder.class);
 
 	@UiField
 	Button submit;
@@ -42,7 +42,6 @@ public class LogSheet implements EntryPoint
 	@UiField
 	Label dateError;
 
-	
 	@UiField
 	TextBox name;
 
@@ -51,18 +50,85 @@ public class LogSheet implements EntryPoint
 
 	@UiField
 	Label submitDetails;
-	
+
 	@UiField
 	TextArea details;
+
+	@Override
+	public void onModuleLoad()
+	{
+		final RootPanel panel = RootPanel.get("form");
+
+		panel.add(uiBinder.createAndBindUi(this));
+		date.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd MMM yyyy")));
+		date.setValue(new Date());
+		date.getTextBox().addChangeHandler(new ChangeHandler()
+		{
+			@Override
+			public void onChange(final ChangeEvent event)
+			{
+				checkForm();
+			}
+		});
+
+		dateError.getElement().getParentElement().getStyle().setDisplay(Display.NONE);
+		nameError.getElement().getParentElement().getStyle().setDisplay(Display.NONE);
+		submitDetails.setVisible(false);
+		submit.setEnabled(false);
+	}
+
+	@UiHandler("name")
+	void nameChanged(final ChangeEvent event)
+	{
+		checkForm();
+	}
+
+	@UiHandler("submit")
+	void submit(final ClickEvent event)
+	{
+		final RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getHostPageBaseURL() + "addLog");
+		String postData = "date=" + URL.encode(date.getTextBox().getText());
+		postData += "&name=" + URL.encode(name.getText());
+		postData += "&comment=" + URL.encode(details.getText());
+		try
+		{
+			builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+			submit.setEnabled(false);
+			submitDetails.setVisible(true);
+			submitDetails.setText("Submitting...");
+			builder.sendRequest(postData, new RequestCallback()
+			{
+				@Override
+				public void onError(final Request request, final Throwable exception)
+				{
+					submit.setEnabled(true);
+					submitDetails.setText("Error Submitting.");
+					GWT.log("Error", exception);
+				}
+
+				@Override
+				public void onResponseReceived(final Request request, final Response response)
+				{
+					submit.setEnabled(true);
+					GWT.log(response.getStatusText() + " : " + response.getText());
+					submitDetails.setText("Successfully Submitted. Thank you!");
+				}
+			});
+		}
+		catch (final Exception e)
+		{
+			GWT.log(e.getMessage(), e);
+		}
+	}
 
 	private void checkForm()
 	{
 		boolean enabled = true;
-		if(date.getValue() == null)
+		if (date.getValue() == null)
 		{
 			submit.setEnabled(false);
 			dateError.getElement().getParentElement().getStyle().setDisplay(Display.INLINE);
-			if(date.getTextBox().getText().trim().equals(""))
+			if (date.getTextBox().getText().trim().equals(""))
 			{
 				dateError.setText("Please enter a date.");
 			}
@@ -78,12 +144,12 @@ public class LogSheet implements EntryPoint
 			dateError.getElement().getParentElement().getStyle().setDisplay(Display.NONE);
 			date.removeStyleName("error");
 		}
-				
-		if(name.getValue() == null || name.getValue().trim().equals(""))
+
+		if (name.getValue() == null || name.getValue().trim().equals(""))
 		{
 			nameError.setText("Please enter a name.");
 			nameError.getElement().getParentElement().getStyle().setDisplay(Display.INLINE);
-			enabled = false;				
+			enabled = false;
 			name.addStyleName("error");
 		}
 		else
@@ -91,74 +157,7 @@ public class LogSheet implements EntryPoint
 			nameError.getElement().getParentElement().getStyle().setDisplay(Display.NONE);
 			name.removeStyleName("error");
 		}
-		
+
 		submit.setEnabled(enabled);
-	}
-	
-	@UiHandler("name")
-	void nameChanged(ChangeEvent event)
-	{
-		checkForm();
-	}
-	
-	@UiHandler("submit")
-	void submit(ClickEvent event)
-	{
-		final RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getHostPageBaseURL() + "addLog");
-		String postData = "date=" + URL.encode(date.getTextBox().getText());
-		postData += "&name=" + URL.encode(name.getText());		
-		postData += "&comment=" + URL.encode(details.getText());
-		try
-		{
-			builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
-			submit.setEnabled(false);
-			submitDetails.setVisible(true);
-			submitDetails.setText("Submitting...");
-			builder.sendRequest(postData, new RequestCallback()
-			{
-				@Override
-				public void onResponseReceived(Request request, Response response)
-				{
-					submit.setEnabled(true);
-					GWT.log(response.getStatusText() + " : " + response.getText());
-					submitDetails.setText("Successfully Submitted. Thank you!");
-				}
-				
-				@Override
-				public void onError(Request request, Throwable exception)
-				{
-					submit.setEnabled(true);
-					submitDetails.setText("Error Submitting.");
-					GWT.log("Error", exception);
-				}
-			});
-		}
-		catch (final Exception e)
-		{
-			GWT.log(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public void onModuleLoad()
-	{
-		RootPanel panel = RootPanel.get("form");
-
-		panel.add(uiBinder.createAndBindUi(this));
-		date.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd MMM yyyy")));
-		date.setValue(new Date());
-		date.getTextBox().addChangeHandler(new ChangeHandler()
-		{
-			@Override
-			public void onChange(ChangeEvent event)
-			{
-				checkForm();
-			}
-		});
-
-		dateError.getElement().getParentElement().getStyle().setDisplay(Display.NONE);
-		nameError.getElement().getParentElement().getStyle().setDisplay(Display.NONE);		
-		submitDetails.setVisible(false);
-		submit.setEnabled(false);
 	}
 }

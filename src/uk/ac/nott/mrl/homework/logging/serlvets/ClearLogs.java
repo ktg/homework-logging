@@ -16,22 +16,22 @@ import uk.ac.nott.mrl.homework.logging.model.Entry;
 public class ClearLogs extends HttpServlet
 {
 	private static final Logger logger = Logger.getLogger(ClearLogs.class.getName());
-	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+
+	@Override
+	public void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws IOException
 	{
 		logger.info("Clear Logs");
-		
-		EntityManager em = EMF.get().createEntityManager();
 
-		
-		Query query = em.createQuery("SELECT e from Entry e");
+		final EntityManager em = EMF.get().createEntityManager();
+
+		final Query query = em.createQuery("SELECT e from Entry e");
 		@SuppressWarnings("unchecked")
-		List<Entry> entries = query.getResultList();
-		for(Entry entry: entries)
+		final List<Entry> entries = query.getResultList();
+		for (final Entry entry : entries)
 		{
-			em.getTransaction().begin();			
+			em.getTransaction().begin();
 			em.remove(entry);
-			em.getTransaction().commit();			
+			em.getTransaction().commit();
 		}
 	}
 }
